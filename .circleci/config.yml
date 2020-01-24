@@ -44,6 +44,8 @@ jobs:
     working_directory: /go/src/github.com/hashicorp/go-cty-funcs
     steps:
       - checkout
+      - go-test:
+          FOLDER: /go/src/github.com/hashicorp/go-cty-funcs/filesystem
   test-darwin:
     executor: darwin
     working_directory: ~/go/src/github.com/hashicorp/go-cty-funcs
@@ -51,6 +53,9 @@ jobs:
       - checkout
       - install-go-unix:
           GOOS: darwin
+      - go-test:
+          FOLDER: ~/go/src/github.com/hashicorp/go-cty-funcs/filesystem
+          GO: ~/goroot/go/bin/go
   test-windows:
     executor:
       name: win/vs2019
@@ -59,6 +64,9 @@ jobs:
     steps:
       - checkout
       - install-go-windows
+      - go-test:
+          FOLDER: ~/go/src/github.com/hashicorp/go-cty-funcs/filesystem
+          GO: ~/goroot/go/bin/go
   check-fmt:
     executor: golang
     steps:
