@@ -9,7 +9,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// BcryptFunc is a function that computes a hash of the given string using the Blowfish cipher.
+// BcryptFunc is a function that computes a hash of the given string using the
+// Blowfish cipher.
 var BcryptFunc = function.New(&function.Spec{
 	Params: []function.Parameter{
 		{
@@ -48,8 +49,8 @@ var BcryptFunc = function.New(&function.Spec{
 })
 
 // Bcrypt computes a hash of the given string using the Blowfish cipher,
-// returning a string in the Modular Crypt Format
-// usually expected in the shadow password file on many Unix systems.
+// returning a string in the Modular Crypt Format usually expected in the
+// shadow password file on many Unix systems.
 func Bcrypt(str cty.Value, cost ...cty.Value) (cty.Value, error) {
 	args := make([]cty.Value, len(cost)+1)
 	args[0] = str

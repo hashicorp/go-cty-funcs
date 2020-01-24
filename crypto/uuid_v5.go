@@ -41,8 +41,8 @@ var UUIDV5Func = function.New(&function.Spec{
 	},
 })
 
-// UUIDV5 generates and returns a Type-5 UUID in the standard hexadecimal string
-// format.
+// UUIDV5 generates and returns a Type-5 UUID in the standard hexadecimal
+// string format.
 func UUIDV5(namespace cty.Value, name cty.Value) (cty.Value, error) {
 	return UUIDV5Func.Call([]cty.Value{namespace, name})
 }
