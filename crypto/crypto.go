@@ -1,4 +1,4 @@
-package stdlib
+package crypto
 
 import (
 	"crypto/md5"
@@ -12,9 +12,13 @@ import (
 	"encoding/pem"
 	"fmt"
 	"hash"
+	"io/ioutil"
+	"os"
+	"path/filepath"
 
 	uuidv5 "github.com/google/uuid"
 	uuid "github.com/hashicorp/go-uuid"
+	"github.com/mitchellh/go-homedir"
 	"github.com/zclconf/go-cty/cty"
 	"github.com/zclconf/go-cty/cty/function"
 	"github.com/zclconf/go-cty/cty/gocty"
@@ -322,4 +326,30 @@ func Sha256(str cty.Value) (cty.Value, error) {
 // Sha512 computes the SHA512 hash of a given string and encodes it with hexadecimal digits.
 func Sha512(str cty.Value) (cty.Value, error) {
 	return Sha512Func.Call([]cty.Value{str})
+}
+
+func readFileBytes(baseDir, path string) ([]byte, error) {
+	path, err := homedir.Expand(path)
+	if err != nil {
+		return nil, fmt.Errorf("failed to expand ~: %s", err)
+	}
+
+	if !filepath.IsAbs(path) {
+		path = filepath.Join(baseDir, path)
+	}
+
+	// Ensure that the path is canonical for the host OS
+	path = filepath.Clean(path)
+
+	src, err := ioutil.ReadFile(path)
+	if err != nil {
+		// ReadFile does not return Terraform-user-friendly error
+		// messages, so we'll provide our own.
+		if os.IsNotExist(err) {
+			return nil, fmt.Errorf("no file exists at %s", path)
+		}
+		return nil, fmt.Errorf("failed to read %s", path)
+	}
+
+	return src, nil
 }

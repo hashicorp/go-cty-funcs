@@ -1,4 +1,4 @@
-package stdlib
+package crypto
 
 import (
 	"fmt"
