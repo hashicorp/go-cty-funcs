@@ -9,8 +9,8 @@ import (
 	"github.com/zclconf/go-cty/cty/gocty"
 )
 
-// SubnetsFunc is similar to CidrSubnetFunc but calculates many consecutive
-// subnet addresses at once, rather than just a single subnet extension.
+// SubnetsFunc is similar to SubnetFunc but calculates many consecutive subnet
+// addresses at once, rather than just a single subnet extension.
 var SubnetsFunc = function.New(&function.Spec{
 	Params: []function.Parameter{
 		{
