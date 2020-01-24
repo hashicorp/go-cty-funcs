@@ -54,7 +54,7 @@ jobs:
       - install-go-unix:
           GOOS: darwin
       - go-test:
-          FOLDER: /go/src/github.com/hashicorp/go-cty-funcs/crypto
+          FOLDER: ~/go/src/github.com/hashicorp/go-cty-funcs/crypto
           GO: ~/goroot/go/bin/go
   test-windows:
     executor:
@@ -65,7 +65,7 @@ jobs:
       - checkout
       - install-go-windows
       - go-test:
-          FOLDER: /go/src/github.com/hashicorp/go-cty-funcs/crypto
+          FOLDER: ~/go/src/github.com/hashicorp/go-cty-funcs/crypto
           GO: ~/goroot/go/bin/go
   check-fmt:
     executor: golang
