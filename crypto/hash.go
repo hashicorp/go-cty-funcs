@@ -16,59 +16,10 @@ import (
 	"os"
 	"path/filepath"
 
-	uuidv5 "github.com/google/uuid"
-	uuid "github.com/hashicorp/go-uuid"
 	"github.com/mitchellh/go-homedir"
 	"github.com/zclconf/go-cty/cty"
 	"github.com/zclconf/go-cty/cty/function"
-	"github.com/zclconf/go-cty/cty/gocty"
-	"golang.org/x/crypto/bcrypt"
 )
-
-var UUIDFunc = function.New(&function.Spec{
-	Params: []function.Parameter{},
-	Type:   function.StaticReturnType(cty.String),
-	Impl: func(args []cty.Value, retType cty.Type) (ret cty.Value, err error) {
-		result, err := uuid.GenerateUUID()
-		if err != nil {
-			return cty.UnknownVal(cty.String), err
-		}
-		return cty.StringVal(result), nil
-	},
-})
-
-var UUIDV5Func = function.New(&function.Spec{
-	Params: []function.Parameter{
-		{
-			Name: "namespace",
-			Type: cty.String,
-		},
-		{
-			Name: "name",
-			Type: cty.String,
-		},
-	},
-	Type: function.StaticReturnType(cty.String),
-	Impl: func(args []cty.Value, retType cty.Type) (ret cty.Value, err error) {
-		var namespace uuidv5.UUID
-		switch {
-		case args[0].AsString() == "dns":
-			namespace = uuidv5.NameSpaceDNS
-		case args[0].AsString() == "url":
-			namespace = uuidv5.NameSpaceURL
-		case args[0].AsString() == "oid":
-			namespace = uuidv5.NameSpaceOID
-		case args[0].AsString() == "x500":
-			namespace = uuidv5.NameSpaceX500
-		default:
-			if namespace, err = uuidv5.Parse(args[0].AsString()); err != nil {
-				return cty.UnknownVal(cty.String), fmt.Errorf("uuidv5() doesn't support namespace %s (%v)", args[0].AsString(), err)
-			}
-		}
-		val := args[1].AsString()
-		return cty.StringVal(uuidv5.NewSHA1(namespace, []byte(val)).String()), nil
-	},
-})
 
 // Base64Sha256Func is a function that computes the SHA256 hash of a given string
 // and encodes it with Base64.
@@ -89,44 +40,6 @@ var Base64Sha512Func = makeStringHashFunction(sha512.New, base64.StdEncoding.Enc
 func MakeFileBase64Sha512Func(baseDir string) function.Function {
 	return makeFileHashFunction(baseDir, sha512.New, base64.StdEncoding.EncodeToString)
 }
-
-// BcryptFunc is a function that computes a hash of the given string using the Blowfish cipher.
-var BcryptFunc = function.New(&function.Spec{
-	Params: []function.Parameter{
-		{
-			Name: "str",
-			Type: cty.String,
-		},
-	},
-	VarParam: &function.Parameter{
-		Name: "cost",
-		Type: cty.Number,
-	},
-	Type: function.StaticReturnType(cty.String),
-	Impl: func(args []cty.Value, retType cty.Type) (ret cty.Value, err error) {
-		defaultCost := 10
-
-		if len(args) > 1 {
-			var val int
-			if err := gocty.FromCtyValue(args[1], &val); err != nil {
-				return cty.UnknownVal(cty.String), err
-			}
-			defaultCost = val
-		}
-
-		if len(args) > 2 {
-			return cty.UnknownVal(cty.String), fmt.Errorf("bcrypt() takes no more than two arguments")
-		}
-
-		input := args[0].AsString()
-		out, err := bcrypt.GenerateFromPassword([]byte(input), defaultCost)
-		if err != nil {
-			return cty.UnknownVal(cty.String), fmt.Errorf("error occured generating password %s", err.Error())
-		}
-
-		return cty.StringVal(string(out)), nil
-	},
-})
 
 // Md5Func is a function that computes the MD5 hash of a given string and encodes it with hexadecimal digits.
 var Md5Func = makeStringHashFunction(md5.New, hex.EncodeToString)
@@ -256,22 +169,6 @@ func makeFileHashFunction(baseDir string, hf func() hash.Hash, enc func([]byte) 
 	})
 }
 
-// UUID generates and returns a Type-4 UUID in the standard hexadecimal string
-// format.
-//
-// This is not a pure function: it will generate a different result for each
-// call. It must therefore be registered as an impure function in the function
-// table in the "lang" package.
-func UUID() (cty.Value, error) {
-	return UUIDFunc.Call(nil)
-}
-
-// UUIDV5 generates and returns a Type-5 UUID in the standard hexadecimal string
-// format.
-func UUIDV5(namespace cty.Value, name cty.Value) (cty.Value, error) {
-	return UUIDV5Func.Call([]cty.Value{namespace, name})
-}
-
 // Base64Sha256 computes the SHA256 hash of a given string and encodes it with
 // Base64.
 //
@@ -290,16 +187,6 @@ func Base64Sha256(str cty.Value) (cty.Value, error) {
 // Terraform uses the "standard" Base64  alphabet as defined in RFC 4648 section 4
 func Base64Sha512(str cty.Value) (cty.Value, error) {
 	return Base64Sha512Func.Call([]cty.Value{str})
-}
-
-// Bcrypt computes a hash of the given string using the Blowfish cipher,
-// returning a string in the Modular Crypt Format
-// usually expected in the shadow password file on many Unix systems.
-func Bcrypt(str cty.Value, cost ...cty.Value) (cty.Value, error) {
-	args := make([]cty.Value, len(cost)+1)
-	args[0] = str
-	copy(args[1:], cost)
-	return BcryptFunc.Call(args)
 }
 
 // Md5 computes the MD5 hash of a given string and encodes it with hexadecimal digits.
