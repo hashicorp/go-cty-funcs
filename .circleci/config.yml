@@ -1,0 +1,78 @@
+orbs:
+  win: circleci/windows@1.0.0
+version: 2.1
+
+executors:
+  golang:
+    docker:
+      - image: circleci/golang:1.13
+  darwin:
+    macos:
+      xcode: "9.0"
+
+commands:
+  install-go-unix:
+    parameters:
+      GOOS:
+        type: string
+      GOVERSION:
+        type: string
+        default: "1.13"
+    steps:
+      - run: mkdir ~/goroot && curl https://dl.google.com/go/go<< parameters.GOVERSION >>.<< parameters.GOOS >>-amd64.tar.gz | tar -C ~/goroot -xz
+  install-go-windows:
+    parameters:
+      GOVERSION:
+        type: string
+        default: "1.13"
+    steps:
+      - run: mkdir ~/goroot && curl https://dl.google.com/go/go<< parameters.GOVERSION >>.windows-amd64.zip --output ~/go<< parameters.GOVERSION >>.windows-amd64.zip
+      - run: unzip ~/go<< parameters.GOVERSION >>.windows-amd64.zip -d ~/goroot
+  go-test:
+    parameters:
+      FOLDER:
+        type: string
+      GO:
+        type: string
+        default: go
+    steps:
+      - run: cd << parameters.FOLDER >> && << parameters.GO >> env && << parameters.GO >> test .
+
+jobs:
+  test-linux:
+    executor: golang
+    working_directory: /go/src/github.com/hashicorp/go-cty-funcs
+    steps:
+      - checkout
+  test-darwin:
+    executor: darwin
+    working_directory: ~/go/src/github.com/hashicorp/go-cty-funcs
+    steps:
+      - checkout
+      - install-go-unix:
+          GOOS: darwin
+  test-windows:
+    executor:
+      name: win/vs2019
+      shell: bash.exe
+    working_directory: ~/go/src/github.com/hashicorp/go-cty-funcs
+    steps:
+      - checkout
+      - install-go-windows
+  check-fmt:
+    executor: golang
+    steps:
+      - checkout
+      - run: go fmt ./...
+      - run: git diff --exit-code
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test-linux
+      - test-darwin
+      - test-windows
+  check-code:
+    jobs:
+      - check-fmt
