@@ -45,21 +45,30 @@ jobs:
     steps:
       - checkout
       - go-test:
+          GO: ~/goroot/go/bin/go
           FOLDER: /go/src/github.com/hashicorp/go-cty-funcs/filesystem
       - go-test:
+          GO: ~/goroot/go/bin/go
           FOLDER: /go/src/github.com/hashicorp/go-cty-funcs/crypto
+      - go-test:
+          GO: ~/goroot/go/bin/go
+          FOLDER: /go/src/github.com/hashicorp/go-cty-funcs/cidr
   test-darwin:
     executor: darwin
     working_directory: ~/go/src/github.com/hashicorp/go-cty-funcs
     steps:
-      - checkout\
+      - checkout
       - install-go-unix:
           GOOS: darwin
       - go-test:
+          GO: ~/goroot/go/bin/go
           FOLDER: ~/go/src/github.com/hashicorp/go-cty-funcs/filesystem
       - go-test:
-          FOLDER: ~/go/src/github.com/hashicorp/go-cty-funcs/crypto
           GO: ~/goroot/go/bin/go
+          FOLDER: ~/go/src/github.com/hashicorp/go-cty-funcs/crypto
+      - go-test:
+          GO: ~/goroot/go/bin/go
+          FOLDER: ~/go/src/github.com/hashicorp/go-cty-funcs/cidr
   test-windows:
     executor:
       name: win/vs2019
@@ -70,8 +79,12 @@ jobs:
       - install-go-windows
       - go-test:
           FOLDER: ~/go/src/github.com/hashicorp/go-cty-funcs/filesystem
+          GO: ~/goroot/go/bin/go
       - go-test:
           FOLDER: ~/go/src/github.com/hashicorp/go-cty-funcs/crypto
+          GO: ~/goroot/go/bin/go
+      - go-test:
+          FOLDER: ~/go/src/github.com/hashicorp/go-cty-funcs/cidr
           GO: ~/goroot/go/bin/go
   check-fmt:
     executor: golang
