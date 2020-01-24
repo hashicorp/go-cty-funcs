@@ -12,8 +12,11 @@ import (
 	"github.com/zclconf/go-cty/cty/function"
 )
 
-// MakeFileExistsFunc is a function that takes a path
-// and determines whether a file exists at that path
+// MakeFileExistsFunc is a function that takes a path and determines whether a
+// file exists at that path.
+//
+// MakeFileExistsFunc will try to expand a path starting with a '~' to the home
+// folder using github.com/mitchellh/go-homedir
 func MakeFileExistsFunc(baseDir string) function.Function {
 	return function.New(&function.Spec{
 		Params: []function.Parameter{
