@@ -5,14 +5,7 @@ import (
 	"encoding/hex"
 
 	"github.com/zclconf/go-cty/cty"
-	"github.com/zclconf/go-cty/cty/function"
 )
-
-// MakeFileMd5Func is a function that is like Md5Func but reads the contents of
-// a file rather than hashing a given literal string.
-func MakeFileMd5Func(baseDir string) function.Function {
-	return makeFileHashFunction(baseDir, md5.New, hex.EncodeToString)
-}
 
 // Md5Func is a function that computes the MD5 hash of a given string and
 // encodes it with hexadecimal digits.
