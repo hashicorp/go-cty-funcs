@@ -1,4 +1,4 @@
-package crypto
+package uuid
 
 import (
 	uuid "github.com/hashicorp/go-uuid"
@@ -6,7 +6,7 @@ import (
 	"github.com/zclconf/go-cty/cty/function"
 )
 
-var UUIDFunc = function.New(&function.Spec{
+var V4Func = function.New(&function.Spec{
 	Params: []function.Parameter{},
 	Type:   function.StaticReturnType(cty.String),
 	Impl: func(args []cty.Value, retType cty.Type) (ret cty.Value, err error) {
@@ -18,12 +18,11 @@ var UUIDFunc = function.New(&function.Spec{
 	},
 })
 
-// UUID generates and returns a Type-4 UUID in the standard hexadecimal string
+// V4 generates and returns a Type-4 UUID in the standard hexadecimal string
 // format.
 //
-// This is not a pure function: it will generate a different result for each
-// call. It must therefore be registered as an impure function in the function
-// table in the "lang" package.
-func UUID() (cty.Value, error) {
-	return UUIDFunc.Call(nil)
+// This is not a "pure" function: it will generate a different result for each
+// call.
+func V4() (cty.Value, error) {
+	return V4Func.Call(nil)
 }

@@ -1,11 +1,11 @@
-package crypto
+package uuid
 
 import (
 	"testing"
 )
 
-func TestUUID(t *testing.T) {
-	result, err := UUID()
+func TestV4(t *testing.T) {
+	result, err := V4()
 	if err != nil {
 		t.Fatal(err)
 	}

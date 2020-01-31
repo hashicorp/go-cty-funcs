@@ -1,4 +1,4 @@
-package crypto
+package uuid
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"github.com/zclconf/go-cty/cty/function"
 )
 
-var UUIDV5Func = function.New(&function.Spec{
+var V5Func = function.New(&function.Spec{
 	Params: []function.Parameter{
 		{
 			Name: "namespace",
@@ -41,8 +41,11 @@ var UUIDV5Func = function.New(&function.Spec{
 	},
 })
 
-// UUIDV5 generates and returns a Type-5 UUID in the standard hexadecimal
+// V5 generates and returns a Type-5 UUID in the standard hexadecimal
 // string format.
-func UUIDV5(namespace cty.Value, name cty.Value) (cty.Value, error) {
-	return UUIDV5Func.Call([]cty.Value{namespace, name})
+//
+// This is not a "pure" function: it will generate a different result for each
+// call.
+func V5(namespace cty.Value, name cty.Value) (cty.Value, error) {
+	return V5Func.Call([]cty.Value{namespace, name})
 }

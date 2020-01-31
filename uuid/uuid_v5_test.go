@@ -1,4 +1,4 @@
-package crypto
+package uuid
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"github.com/zclconf/go-cty/cty"
 )
 
-func TestUUIDV5(t *testing.T) {
+func TestV5(t *testing.T) {
 	tests := []struct {
 		Namespace cty.Value
 		Name      cty.Value
@@ -54,7 +54,7 @@ func TestUUIDV5(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(fmt.Sprintf("uuidv5(%#v, %#v)", test.Namespace, test.Name), func(t *testing.T) {
-			got, err := UUIDV5(test.Namespace, test.Name)
+			got, err := V5(test.Namespace, test.Name)
 
 			if test.Err {
 				if err == nil {
