@@ -1,3 +1,5 @@
+set -e
+
 go fmt ./... 
 goimports -w */*.go 
 for f in */
@@ -7,3 +9,5 @@ do
     go test .
     popd > /dev/null
 done
+
+git diff --exit-code --ignore-space-change --ignore-space-at-eol
