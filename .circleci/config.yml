@@ -52,6 +52,9 @@ commands:
       - go-test:
           GO: << parameters.GO >>
           FOLDER: cidr
+      - go-test:
+          GO: << parameters.GO >>
+          FOLDER: uuid
 jobs:
   test-linux:
     executor: golang
