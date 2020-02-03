@@ -327,21 +327,18 @@ func TestBasename(t *testing.T) {
 }
 
 func TestDirname(t *testing.T) {
-	tests := []struct {
+	type testCase struct {
 		Path cty.Value
 		Want cty.Value
 		Err  bool
-	}{
+	}
+	tests := []testCase{
 		{
 			cty.StringVal("testdata/hello.txt"),
 			cty.StringVal("testdata"),
 			false,
 		},
-		{
-			cty.StringVal("testdata/foo/hello.txt"),
-			cty.StringVal("testdata/foo"),
-			false,
-		},
+
 		{
 			cty.StringVal("hello.txt"),
 			cty.StringVal("."),
@@ -352,6 +349,26 @@ func TestDirname(t *testing.T) {
 			cty.StringVal("."),
 			false,
 		},
+	}
+	switch runtime.GOOS {
+	case "windows":
+		tests = append(tests, []testCase{
+			{
+				cty.StringVal("testdata/foo/hello.txt"),
+				cty.StringVal("testdata\\foo"),
+				false,
+			},
+		}...,
+		)
+	default:
+		tests = append(tests, []testCase{
+			{
+				cty.StringVal("testdata/foo/hello.txt"),
+				cty.StringVal("testdata/foo"),
+				false,
+			},
+		}...,
+		)
 	}
 
 	for _, test := range tests {
