@@ -1,5 +1,5 @@
 set -e
-
+clear
 go fmt ./... 
 goimports -w */*.go 
 for f in */
