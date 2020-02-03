@@ -3,6 +3,7 @@ package filesystem
 import (
 	"fmt"
 	"path/filepath"
+	"runtime"
 	"testing"
 
 	homedir "github.com/mitchellh/go-homedir"
@@ -53,12 +54,13 @@ func TestFileExists(t *testing.T) {
 }
 
 func TestFileSet(t *testing.T) {
-	tests := []struct {
+	type testCase struct {
 		Path    cty.Value
 		Pattern cty.Value
 		Want    cty.Value
 		Err     bool
-	}{
+	}
+	tests := []testCase{
 		{
 			cty.StringVal("."),
 			cty.StringVal("testdata*"),
@@ -193,12 +195,6 @@ func TestFileSet(t *testing.T) {
 			true,
 		},
 		{
-			cty.StringVal("."),
-			cty.StringVal("\\"),
-			cty.SetValEmpty(cty.String),
-			true,
-		},
-		{
 			cty.StringVal("testdata"),
 			cty.StringVal("missing"),
 			cty.SetValEmpty(cty.String),
@@ -243,6 +239,28 @@ func TestFileSet(t *testing.T) {
 			}),
 			false,
 		},
+	}
+	switch runtime.GOOS {
+	case "windows":
+		tests = append(tests, []testCase{
+			{
+				cty.StringVal("."),
+				cty.StringVal("//"),
+				cty.SetValEmpty(cty.String),
+				true,
+			},
+		}...,
+		)
+	default:
+		tests = append(tests, []testCase{
+			{
+				cty.StringVal("."),
+				cty.StringVal("\\"),
+				cty.SetValEmpty(cty.String),
+				true,
+			},
+		}...,
+		)
 	}
 
 	for _, test := range tests {
