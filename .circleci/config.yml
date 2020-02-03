@@ -45,13 +45,10 @@ jobs:
     steps:
       - checkout
       - go-test:
-          GO: go
           FOLDER: /go/src/github.com/hashicorp/go-cty-funcs/filesystem
       - go-test:
-          GO: go
           FOLDER: /go/src/github.com/hashicorp/go-cty-funcs/crypto
       - go-test:
-          GO: go
           FOLDER: /go/src/github.com/hashicorp/go-cty-funcs/cidr
   test-darwin:
     executor: darwin
