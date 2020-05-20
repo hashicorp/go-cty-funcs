@@ -28,22 +28,22 @@ commands:
     steps:
       - run: mkdir ~/goroot && curl https://dl.google.com/go/go<< parameters.GOVERSION >>.windows-amd64.zip --output ~/go<< parameters.GOVERSION >>.windows-amd64.zip
       - run: unzip ~/go<< parameters.GOVERSION >>.windows-amd64.zip -d ~/goroot
-  go-test:
+  go-tests:
     parameters:
-      FOLDER:
-        type: string
       GO:
         type: string
         default: go
     steps:
-      - run: cd << parameters.FOLDER >> && << parameters.GO >> env && << parameters.GO >> test .
-
+      - run: << parameters.GO >> test ./...
+  
 jobs:
   test-linux:
     executor: golang
     working_directory: /go/src/github.com/hashicorp/go-cty-funcs
     steps:
       - checkout
+      - go-tests
+
   test-darwin:
     executor: darwin
     working_directory: ~/go/src/github.com/hashicorp/go-cty-funcs
@@ -51,6 +51,8 @@ jobs:
       - checkout
       - install-go-unix:
           GOOS: darwin
+      - go-tests:
+          GO: ~/goroot/go/bin/go
   test-windows:
     executor:
       name: win/vs2019
@@ -59,6 +61,8 @@ jobs:
     steps:
       - checkout
       - install-go-windows
+      - go-tests:
+          GO: ~/goroot/go/bin/go
   check-fmt:
     executor: golang
     steps:
