@@ -8,7 +8,7 @@ executors:
       - image: docker.mirror.hashicorp.services/circleci/golang:1.13
   darwin:
     macos:
-      xcode: "9.0.1" # https://circleci.com/docs/2.0/testing-ios/#supported-xcode-versions
+      xcode: "9.4.1" # https://circleci.com/docs/2.0/testing-ios/#supported-xcode-versions
 
 commands:
   install-go-unix:
