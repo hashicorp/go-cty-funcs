@@ -1,45 +1,34 @@
-name: hashicorp/go-cty-funcs/test
+name: Go Tests
 on:
   push:
-    branches:
-      - master
-jobs:
-  test-linux:
-    defaults:
-      run:
-        working-directory: "/go/src/github.com/hashicorp/go-cty-funcs"
-    runs-on: ubuntu-latest
-    container:
-      image: golang:1.13
-    steps:
-      - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3.5.0
-      - uses: "./.github/actions/go-tests"
-  test-darwin:
-    defaults:
-      run:
-        working-directory: "~/go/src/github.com/hashicorp/go-cty-funcs"
-    runs-on: macos-latest
-    steps:
-      - uses: maxim-lobanov/setup-xcode@9a697e2b393340c3cacd97468baa318e4c883d98 # v1.5.1
-        with:
-          xcode-version: '9.0'
-      - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3.5.0
-      - uses: "./.github/actions/install-go-unix"
-        with:
-          GOOS: darwin
-      - uses: "./.github/actions/go-tests"
-        with:
-          GO: "~/goroot/go/bin/go"
-  test-windows:
-    defaults:
-      run:
-        working-directory: "~/go/src/github.com/hashicorp/go-cty-funcs"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3.5.0
-      - uses: "./.github/actions/install-go-windows"
-      - uses: "./.github/actions/go-tests"
-        with:
-          GO: "~/goroot/go/bin/go"
+
 permissions:
   contents: read
+
+jobs:
+  define-runners:
+    runs-on: ubuntu-latest
+    outputs:
+      runners: '{"linux":"ubuntu-latest", "macos":"macos-latest", "windows":"windows-latest"}'
+    steps:
+      - run: true # no-op
+
+  test:
+    needs: [define-runners]
+    strategy:
+      matrix:
+        go-version:
+          - '1.14' # oldest supported; named in go.mod
+          - 'oldstable'
+          - 'stable'
+        os:
+          - 'linux'
+          - 'macos'
+          - 'windows'
+    runs-on: ${{ fromJSON(needs.define-runners.outputs.runners)[ matrix.os ] }}
+    steps:
+      - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3.5.0
+      - uses: actions/setup-go@4d34df0c2316fe8122ab82dc22947d607c0c91f9 # v4.0.0
+        with:
+          go-version: ${{ matrix.go-version }}
+      - run: go test ./...
