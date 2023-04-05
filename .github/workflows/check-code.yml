@@ -1,0 +1,14 @@
+name: hashicorp/go-cty-funcs/check-code
+on:
+  push:
+    branches:
+    - master
+jobs:
+  check-fmt:
+    runs-on: ubuntu-latest
+    container:
+      image: golang:1.13
+    steps:
+    - uses: actions/checkout@v3.5.0
+    - run: go fmt ./...
+    - run: git diff --exit-code
