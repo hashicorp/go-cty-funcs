@@ -1,0 +1,12 @@
+name: install-go-unix
+inputs:
+  GOOS:
+    required: false
+  GOVERSION:
+    required: false
+    default: '1.13'
+runs:
+  using: composite
+  steps:
+  - run: mkdir ~/goroot && curl https://dl.google.com/go/go${{ inputs.GOVERSION }}.${{ inputs.GOOS }}-amd64.tar.gz | tar -C ~/goroot -xz
+    shell: bash
