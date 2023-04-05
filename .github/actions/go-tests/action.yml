@@ -1,0 +1,10 @@
+name: go-tests
+inputs:
+  GO:
+    required: false
+    default: go
+runs:
+  using: composite
+  steps:
+  - run: "${{ inputs.GO }} test ./..."
+    shell: bash
