@@ -12,7 +12,7 @@ jobs:
     container:
       image: golang:1.13
     steps:
-    - uses: actions/checkout@v3.5.0
+    - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3.5.0
     - uses: "./.github/actions/go-tests"
   test-darwin:
     defaults:
@@ -20,10 +20,10 @@ jobs:
         working-directory: "~/go/src/github.com/hashicorp/go-cty-funcs"
     runs-on: macos-latest
     steps:
-    - uses: maxim-lobanov/setup-xcode@v1.5.1
+    - uses: maxim-lobanov/setup-xcode@9a697e2b393340c3cacd97468baa318e4c883d98 # v1.5.1
       with:
         xcode-version: '9.0'
-    - uses: actions/checkout@v3.5.0
+    - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3.5.0
     - uses: "./.github/actions/install-go-unix"
       with:
         GOOS: darwin
@@ -36,7 +36,7 @@ jobs:
         working-directory: "~/go/src/github.com/hashicorp/go-cty-funcs"
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3.5.0
+    - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3.5.0
     - uses: "./.github/actions/install-go-windows"
     - uses: "./.github/actions/go-tests"
       with:
