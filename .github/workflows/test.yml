@@ -2,7 +2,7 @@ name: hashicorp/go-cty-funcs/test
 on:
   push:
     branches:
-    - master
+      - master
 jobs:
   test-linux:
     defaults:
@@ -12,32 +12,34 @@ jobs:
     container:
       image: golang:1.13
     steps:
-    - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3.5.0
-    - uses: "./.github/actions/go-tests"
+      - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3.5.0
+      - uses: "./.github/actions/go-tests"
   test-darwin:
     defaults:
       run:
         working-directory: "~/go/src/github.com/hashicorp/go-cty-funcs"
     runs-on: macos-latest
     steps:
-    - uses: maxim-lobanov/setup-xcode@9a697e2b393340c3cacd97468baa318e4c883d98 # v1.5.1
-      with:
-        xcode-version: '9.0'
-    - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3.5.0
-    - uses: "./.github/actions/install-go-unix"
-      with:
-        GOOS: darwin
-    - uses: "./.github/actions/go-tests"
-      with:
-        GO: "~/goroot/go/bin/go"
+      - uses: maxim-lobanov/setup-xcode@9a697e2b393340c3cacd97468baa318e4c883d98 # v1.5.1
+        with:
+          xcode-version: '9.0'
+      - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3.5.0
+      - uses: "./.github/actions/install-go-unix"
+        with:
+          GOOS: darwin
+      - uses: "./.github/actions/go-tests"
+        with:
+          GO: "~/goroot/go/bin/go"
   test-windows:
     defaults:
       run:
         working-directory: "~/go/src/github.com/hashicorp/go-cty-funcs"
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3.5.0
-    - uses: "./.github/actions/install-go-windows"
-    - uses: "./.github/actions/go-tests"
-      with:
-        GO: "~/goroot/go/bin/go"
+      - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3.5.0
+      - uses: "./.github/actions/install-go-windows"
+      - uses: "./.github/actions/go-tests"
+        with:
+          GO: "~/goroot/go/bin/go"
+permissions:
+  contents: read
