@@ -1,7 +1,10 @@
+# Copyright IBM Corp. 2020, 2025
+# SPDX-License-Identifier: MPL-2.0
+
 set -e
 clear
-go fmt ./... 
-goimports -w */*.go 
+go fmt ./...
+goimports -w */*.go
 for f in */
 do
     pushd $f > /dev/null
