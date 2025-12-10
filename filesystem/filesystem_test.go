@@ -257,7 +257,7 @@ func TestFileSet(t *testing.T) {
 				cty.StringVal("."),
 				cty.StringVal("\\"),
 				cty.SetValEmpty(cty.String),
-				true,
+				false,
 			},
 		}...,
 		)
