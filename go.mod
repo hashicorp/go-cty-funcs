@@ -1,6 +1,6 @@
 module github.com/hashicorp/go-cty-funcs
 
-go 1.25
+go 1.25.0
 
 require (
 	github.com/apparentlymart/go-cidr v1.1.0
@@ -8,10 +8,10 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/zclconf/go-cty v1.18.0
-	golang.org/x/crypto v0.48.0
+	golang.org/x/crypto v0.49.0
 )
 
 require (
 	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
-	golang.org/x/text v0.34.0 // indirect
+	golang.org/x/text v0.35.0 // indirect
 )
