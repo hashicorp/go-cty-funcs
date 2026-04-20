@@ -7,7 +7,7 @@ require (
 	github.com/bmatcuk/doublestar v1.3.4
 	github.com/google/uuid v1.6.0
 	github.com/mitchellh/go-homedir v1.1.0
-	github.com/zclconf/go-cty v1.18.0
+	github.com/zclconf/go-cty v1.18.1
 	golang.org/x/crypto v0.50.0
 )
 
