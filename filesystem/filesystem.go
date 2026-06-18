@@ -1,4 +1,4 @@
-// Copyright IBM Corp. 2020, 2025
+// Copyright IBM Corp. 2020, 2026
 // SPDX-License-Identifier: MPL-2.0
 
 package filesystem
@@ -6,7 +6,6 @@ package filesystem
 import (
 	"encoding/base64"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"unicode/utf8"
@@ -238,7 +237,7 @@ func readFileBytes(baseDir, path string) ([]byte, error) {
 	// Ensure that the path is canonical for the host OS
 	path = filepath.Clean(path)
 
-	src, err := ioutil.ReadFile(path)
+	src, err := os.ReadFile(path)
 	if err != nil {
 		// ReadFile does not return Terraform-user-friendly error
 		// messages, so we'll provide our own.
