@@ -16,3 +16,6 @@ jobs:
       - run: |
           go fmt ./...
           git diff --exit-code
+
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@82606bf257cbaff209d206a39f5134f0cfbfd2ee # v9.2.1
