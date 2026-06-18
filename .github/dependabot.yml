@@ -4,9 +4,21 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
+    commit-message:
+      prefix: "[chore] : "
+    groups:
+      github-actions:
+        patterns:
+          - "*"
 
   - package-ecosystem: "gomod"
     directory: "/"
     schedule:
       interval: "weekly"
+    commit-message:
+      prefix: "[chore] : "
+    groups:
+      go:
+        patterns:
+          - "*"
