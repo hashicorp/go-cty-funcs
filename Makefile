@@ -1,4 +1,4 @@
-default: copywriteheaders lint
+default: copywriteheaders lint test
 
 .PHONY: copywriteheaders
 copywriteheaders:
@@ -15,4 +15,10 @@ deps:
 lint:
 	@echo "==> Running linters..."
 	@golangci-lint run
+	@echo "==> Done"
+
+. PHONY: test
+test:
+	@echo "==> Running tests..."
+	@go test -v -race -timeout=60s ./...
 	@echo "==> Done"
