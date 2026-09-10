@@ -1,6 +1,6 @@
 module github.com/hashicorp/go-cty-funcs
 
-go 1.25.0
+go 1.26.0
 
 require (
 	github.com/apparentlymart/go-cidr v1.1.1
@@ -8,7 +8,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/zclconf/go-cty v1.19.0
-	golang.org/x/crypto v0.55.0
+	golang.org/x/crypto v0.56.0
 )
 
 require (
